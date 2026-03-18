@@ -118,7 +118,7 @@ def create_output_with_hardcoded_structure(structured_data, output_filename):
     desc_to_code_map = dict(zip(HARDCODED_HEADER_ROW_2, HARDCODED_HEADER_ROW_1))
 
     # For the special case of Czechia vs Czech Republic
-    country_name_map = {"Czechia": "Czech Republic"}
+    country_name_map = {"Czechia": "Czech Republic", "Türkiye": "Turkey"}
     df['Country_normalized'] = df['Country'].replace(country_name_map)
 
     # Maps each data point to its correct column in the final, rigid template
@@ -160,7 +160,9 @@ def create_output_with_hardcoded_structure(structured_data, output_filename):
 # --- Main Execution Block ---
 search_directory = '.'
 source_sheet_name = "Table" # The name of the sheet to read in the source file
-output_filename = "OECDAR_DATA.xlsx"
+output_dir = os.path.join('.', 'output')
+os.makedirs(output_dir, exist_ok=True)
+output_filename = os.path.join(output_dir, "OECDAR_DATA.xlsx")
 
 # 1. Find any valid Excel file to process
 source_file_path = find_any_excel_file(search_directory)

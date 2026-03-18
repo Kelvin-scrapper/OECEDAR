@@ -1,11 +1,17 @@
 import subprocess
 import sys
+import os
 
 def run_script(script_name):
     """Runs a python script and prints its output."""
     print(f'--- Running {script_name} ---')
     try:
-        process = subprocess.Popen([sys.executable, script_name], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, encoding='utf-8')
+        env = {**os.environ, "PYTHONIOENCODING": "utf-8"}
+        process = subprocess.Popen(
+            [sys.executable, script_name],
+            stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+            text=True, encoding='utf-8', errors='replace', env=env,
+        )
         while True:
             output = process.stdout.readline()
             if output == '' and process.poll() is not None:
