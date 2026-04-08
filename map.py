@@ -59,10 +59,15 @@ def parse_pension_data_with_xlwings(file_path, sheet_name):
     Uses xlwings to robustly read and parse the 'Pensions at a glance' file format.
     The logic is universal and does not depend on a fixed order in the source.
     """
+    import time
     print("Using xlwings to open Excel in the background and read the data...")
     with xw.App(visible=False) as app:
         try:
+            app.display_alerts = False
             workbook = app.books.open(file_path)
+            # The OECD file uses a web query — must refresh before reading
+            workbook.api.RefreshAll()
+            time.sleep(8)  # Wait for async refresh to complete
             sheet = workbook.sheets[sheet_name]
             df = sheet.used_range.options(pd.DataFrame, header=False, index=False).value
             workbook.close()
